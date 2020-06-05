@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import ForecastItem from './ForecastItem';
+import transformForecast from './../services/transformForecast';
 import './styles.css';
 
 /*
@@ -32,7 +33,18 @@ export default class ForecastExtended extends Component {
     }
 
     componentDidMount() {
+        const url_forecast = `${url}?q=${this.props.city}&appid=${api_key}`;
 
+        fetch(url_forecast).then(
+            data => (data.json())
+        ).then(
+            weather_data => {
+                console.log(weather_data);
+                const forecastData = transformForecast(weather_data);
+                console.log(forecastData);
+                this.setState({forecastData});
+            }
+        )
     }
 
     renderForecastItemDays() {
